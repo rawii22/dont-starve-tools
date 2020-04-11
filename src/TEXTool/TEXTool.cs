@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 /*
 Klei Studio is licensed under the MIT license.
 Copyright © 2013 Matt Stevens
@@ -41,12 +41,12 @@ namespace TEXTool
     public class KleiTextureAtlasElement
     {
         public string Name { get; set; }
-        public int ImgHmin { get; set; }
-        public int ImgHmax { get; set; }
-        public int ImgVmin { get; set; }
-        public int ImgVmax { get; set; }
+        public float ImgHmin { get; set; }
+        public float ImgHmax { get; set; }
+        public float ImgVmin { get; set; }
+        public float ImgVmax { get; set; }
 
-        public KleiTextureAtlasElement(string name, int u1, int u2, int v1, int v2)
+        public KleiTextureAtlasElement(string name, float u1, float u2, float v1, float v2)
         {
             this.Name = name;
             this.ImgHmin = u1;
@@ -188,6 +188,7 @@ namespace TEXTool
             if (File.Exists(atlasDataPath))
             {
                 atlasElements = ReadAtlasData(atlasDataPath, mipmap.Width, mipmap.Height);
+                atlasElements.Sort((x, y) => string.Compare(x.Name, y.Name));
             }
 
             var imgReader = new BinaryReader(new MemoryStream(argbData));
@@ -229,8 +230,8 @@ namespace TEXTool
                 foreach (XmlNode xChild in xNodeElements.ChildNodes)
                 {
                     string name = xChild.Attributes.GetNamedItem("name").Value;
-                    double u1 = Convert.ToDouble(xChild.Attributes.GetNamedItem("u1").Value.Replace(".", ","));
-                    double u2 = Convert.ToDouble(xChild.Attributes.GetNamedItem("u2").Value.Replace(".", ","));
+                    double u1 = Convert.ToDouble(xChild.Attributes.GetNamedItem("u1").Value);
+                    double u2 = Convert.ToDouble(xChild.Attributes.GetNamedItem("u2").Value);
 
                     /* !!! IMPORTANT TIP !!!
                      * You may need to invert the y-axis depending on the software you use to check your pixel coordinates. 
@@ -243,19 +244,19 @@ namespace TEXTool
                      */
 
                     /* NORMAL THE Y-AXIS */
-                    double v1 = Convert.ToDouble(xChild.Attributes.GetNamedItem("v1").Value.Replace(".", ","));
-                    double v2 = Convert.ToDouble(xChild.Attributes.GetNamedItem("v2").Value.Replace(".", ","));
+                    double v1 = Convert.ToDouble(xChild.Attributes.GetNamedItem("v1").Value);
+                    double v2 = Convert.ToDouble(xChild.Attributes.GetNamedItem("v2").Value);
 
                     /* INVERT THE Y-AXIS */
                     v1 = 1 - v1;
                     v2 = 1 - v2;
 
-                    int imgHmin, imgHmax, imgVmin, imgVmax;
+                    float imgHmin, imgHmax, imgVmin, imgVmax;
                     double margin = 0.5;
-                    imgHmin = Convert.ToInt16(u1 * mipmapWidth - margin);
-                    imgHmax = Convert.ToInt16(u2 * mipmapWidth - margin);
-                    imgVmin = Convert.ToInt16(v1 * mipmapHeight - margin);
-                    imgVmax = Convert.ToInt16(v2 * mipmapHeight - margin);
+                    imgHmin = (float)(u1 * mipmapWidth - margin);
+                    imgHmax = (float)(u2 * mipmapWidth - margin);
+                    imgVmin = (float)(v1 * mipmapHeight - margin);
+                    imgVmax = (float)(v2 * mipmapHeight - margin);
 
                     AtlasElements.Add(new KleiTextureAtlasElement(name, imgHmin, imgHmax, imgVmin, imgVmax));
                 }

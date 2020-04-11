@@ -228,7 +228,7 @@ namespace TEXTool
 
         private void DrawRectangle(KleiTextureAtlasElement element)
         {
-            int x, y, width, height;
+            float x, y, width, height;
             x = element.ImgHmin;
             y = element.ImgVmin;
 
@@ -242,7 +242,7 @@ namespace TEXTool
             height = Math.Abs(element.ImgVmax - element.ImgVmin);
 
             graphicsPath = new GraphicsPath();
-            graphicsPath.AddRectangle(new Rectangle(x, y, width, height));
+            graphicsPath.AddRectangle(new RectangleF(x, y, width, height));
 
             atlasElementWidthToolStrip.Text = width.ToString();
             atlasElementHeightToolStrip.Text = height.ToString();

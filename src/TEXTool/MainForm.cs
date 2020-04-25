@@ -106,6 +106,17 @@ namespace TEXTool
                 MessageBox.Show(@"Error, this is a pre 'Cave Update' TEX file. If you want to convert this, please use an older version of TEXTool or 'update' the file using the converter found in the offical thread.");
         }
 
+        public void OpenExternalFile(string filename)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.FileName = filename;
+                ProgressForm = new ProgressForm();
+                ProgressForm.StartPosition = FormStartPosition.CenterParent;
+                backgroundWorker.RunWorkerAsync(dialog);
+            }
+        }
+
         private void OpenFileDialog()
         {
             using (OpenFileDialog dialog = new OpenFileDialog())

@@ -28,6 +28,8 @@ SOFTWARE.
 using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace TEXTool
 {
@@ -58,9 +60,15 @@ namespace TEXTool
 
                 MainForm form = new MainForm();
 
-                // Open With..
-                if (args.Length > 0)
-                    form.Tool.OpenFile(args[0], new FileStream(args[0], FileMode.Open, FileAccess.Read));
+                Task t = new Task(() =>
+                {
+                    Thread.Sleep(1000);
+                    if (args.Length > 0)
+                    {
+                        form.OpenExternalFile(args[0]);
+                    }
+                });
+                t.Start();
 
                 Application.Run(form);
             }
